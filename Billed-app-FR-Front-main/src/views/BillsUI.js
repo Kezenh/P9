@@ -17,9 +17,10 @@ const row = (bill) => {
       </td>
     </tr>
     `)
-  }
+}
 
 const rows = (data) => {
+  data.sort((a, b) => b.date.localeCompare(a.date));
   return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 }
 
