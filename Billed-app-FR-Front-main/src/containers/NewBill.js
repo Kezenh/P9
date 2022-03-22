@@ -18,27 +18,37 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
-    const formData = new FormData()
-    const email = JSON.parse(localStorage.getItem("user")).email
-    formData.append('file', file)
-    formData.append('email', email)
-
-    this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
-      .then(({fileUrl, key}) => {
-        console.log(fileUrl)
-        this.billId = key
-        this.fileUrl = fileUrl
-        this.fileName = fileName
-      }).catch(error => console.error(error))
+    const regexFile = /.(?:jpg|jpeg|png)$/
+    if (regexFile.test(file.name)) {
+      const filePath = e.target.value.split(/\\/g)
+      const fileName = filePath[filePath.length-1]
+      const formData = new FormData()
+      const email = JSON.parse(localStorage.getItem("user")).email
+      formData.append('file', file)
+      formData.append('email', email)
+      this.store
+        .bills()
+        .create({
+          data: formData,
+          headers: {
+            noContentType: true
+          }
+        })
+        .then(({fileUrl, key}) => {
+          this.billId = key
+          this.fileUrl = fileUrl
+          this.fileName = fileName
+        }).catch(error => console.error(error))
+    }
+    else {
+      this.document.querySelector(`input[data-testid="file"]`).remove()
+      const fileInput = this.document.createElement("input")
+      fileInput.setAttribute("class", "form-control blue-border")
+      fileInput.setAttribute("required", "")
+      fileInput.setAttribute("type", "file")
+      fileInput.setAttribute("data-testid", "file")
+      this.document.getElementsByClassName("col-half")[5].appendChild(fileInput)
+    }
   }
   handleSubmit = e => {
     e.preventDefault()
