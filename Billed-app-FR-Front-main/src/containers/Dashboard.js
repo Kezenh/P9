@@ -96,16 +96,13 @@ export default class {
       $('.dashboard-right-container div').html(DashboardFormUI(bill))
       $('.vertical-navbar').css({ height: '150vh' })
       this.counter ++
-      console.log(this.counter)
     } else {
       $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
-
       $('.dashboard-right-container div').html(`
         <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
       `)
       $('.vertical-navbar').css({ height: '120vh' })
       this.counter ++
-      console.log(this.counter)
     }
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
@@ -140,21 +137,24 @@ export default class {
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
       this.counter ++
-      console.log(this.counter)
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
       this.counter ++
-      console.log(this.counter)
     }
-
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      let container = this.document.getElementById("status-bills-container" + this.index);
+      let billId = this.document.getElementById("open-bill" + bill.id);
+      if (billId != null) {
+        if (billId.parentNode == container) {
+          billId.addEventListener("click", () => {
+            this.handleEditTicket(e, bill, bills)
+          });
+        }
+      }
     })
-
     return bills
-
   }
 
   getBillsAllUsers = () => {
