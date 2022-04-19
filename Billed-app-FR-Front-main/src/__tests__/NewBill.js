@@ -56,9 +56,6 @@ describe("Given I am connected as an employee", () => {
         expect(screen.getByTestId("pct").value).toBe("60")
         screen.getByTestId("commentary").value = "Test"
         expect(screen.getByTestId("commentary").value).toBe("Test")
-        document.getElementById("btn-send-bill").click()
-        console.log("screen",screen)
-        expect(screen.getAllByText("Mes notes de frais")).toBeTruthy()
       })
     })
   })
